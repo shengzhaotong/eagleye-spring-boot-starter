@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vbyte.decisionengine.mapper.FieldMapper">
+
+    <update id="fields">
+        CREATE TABLE IF NOT EXISTS `fields` (
+        `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
+        `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '字段名',
+        `table_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '表名',
+        `type_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类型',
+        `notes` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '注释',
+        PRIMARY KEY (`id`) USING BTREE
+        ) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic
+    </update>
+
+    <update id="fieldsMsg">
+        CREATE TABLE IF NOT EXISTS `fields_msg` (
+        `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
+        `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '字段名',
+        `type_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '字段类型',
+        `table_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '表名',
+        `table_id` bigint(0) NOT NULL COMMENT '属于该表第table_id条数据',
+        `json_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'json序列化之后的字段值',
+        PRIMARY KEY (`id`) USING BTREE,
+        FULLTEXT INDEX `index`(`json_value`) WITH PARSER `ngram`
+        ) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic
+    </update>
+
+</mapper>
