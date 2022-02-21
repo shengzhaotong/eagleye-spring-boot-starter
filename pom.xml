@@ -33,7 +33,6 @@
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 	</dependencies>
-
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -41,7 +40,6 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
 	<scm>
 		<url>git@github.com:shengzhaotong/eagleye-spring-boot-starter.git</url>
 		<connection>scm:git:git@github.com:shengzhaotong/eagleye-spring-boot-starter.git</connection>
@@ -54,27 +52,24 @@
 			<organization>v-byte</organization>
 		</developer>
 	</developers>
-
 	<!--  Issue地址  -->
 	<issueManagement>
 		<system>Github Issue</system>
 		<url>https://github.com/shengzhaotong/eagleye-spring-boot-starter/issues</url>
 	</issueManagement>
-
 	<distributionManagement>
 		<snapshotRepository>
-			<id>ossrh</id>
+			<id>sonatype-nexus-snapshots</id>
 			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
-			<id>ossrh</id>
+			<id>sonatype-nexus-snapshots</id>
 			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
-
 	<profiles>
 		<profile>
-			<id>default</id>
+			<id>release</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
