@@ -1,6 +1,8 @@
 package com.vbyte.decisionengine.config;
 
+import com.vbyte.decisionengine.mapper.ExpandFieldMapper;
 import com.vbyte.decisionengine.mapper.FieldMapper;
+import com.vbyte.decisionengine.service.ExpandFieldService;
 import com.vbyte.decisionengine.service.FieldService;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -28,6 +30,17 @@ public class FieldConfiguration {
     @Bean
     public FieldService fieldService () {
         return new FieldService();
+    }
+
+    @Bean
+    public ExpandFieldService expandFieldService () {
+        return new ExpandFieldService();
+    }
+
+    @Bean
+    public ExpandFieldMapper expandFieldMapper () {
+        sqlSessionFactory.getConfiguration().addMapper(ExpandFieldMapper.class);
+        return template.getMapper(ExpandFieldMapper.class);
     }
 
     @Bean

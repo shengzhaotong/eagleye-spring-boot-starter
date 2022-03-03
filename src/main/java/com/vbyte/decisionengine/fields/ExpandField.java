@@ -4,12 +4,13 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
 import java.util.Objects;
 
-public abstract class BaseField<T> implements Serializable {
+@TableName("fields_msg")
+public class ExpandField implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -17,7 +18,7 @@ public abstract class BaseField<T> implements Serializable {
      * 主键
      * */
     @TableId(value = "id", type = IdType.AUTO)
-    protected Long id;
+    protected String id;
 
     /**
      * 字段名
@@ -29,13 +30,13 @@ public abstract class BaseField<T> implements Serializable {
      * 字段类型
      * */
     @TableField(exist = false)
-    protected final Class<T> type;
+    protected Class<?> type;
 
     /**
      * 字段类型的名称
      * */
     @TableField("type_name")
-    protected final String typeName;
+    protected String typeName;
 
     /**
      * 表名
@@ -47,13 +48,13 @@ public abstract class BaseField<T> implements Serializable {
      * 该字段信息所属于该表的第table_id条字段
      * */
     @TableField("table_id")
-    protected Long tableId;
+    protected String tableId;
 
     /**
      * 字段值
      * */
     @TableField(exist = false)
-    protected T value;
+    public Object value;
 
     /**
      * 字段值经过json序列化之后的值
@@ -61,20 +62,11 @@ public abstract class BaseField<T> implements Serializable {
     @TableField("json_value")
     protected String jsonValue;
 
-    {
-        type = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        typeName = type.getName();
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -86,7 +78,23 @@ public abstract class BaseField<T> implements Serializable {
         this.name = name;
     }
 
-    public Class<T> getType() {
+    public void setTypeName (String typeName) {
+        this.typeName = typeName;
+        try {
+            this.type = Class.forName(this.typeName);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        if (this.jsonValue != null) {
+            this.value = JSON.parseObject(this.jsonValue,type);
+        }
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
+    }
+
+    public Class<?> getType() {
         return type;
     }
 
@@ -102,21 +110,12 @@ public abstract class BaseField<T> implements Serializable {
         this.tableName = tableName;
     }
 
-    public Long getTableId() {
+    public String getTableId() {
         return tableId;
     }
 
-    public void setTableId(Long tableId) {
-        this.tableId = tableId;
-    }
-
-    public T getValue() {
+    public Object getValue() {
         return value;
-    }
-
-    public void setValue(T value) {
-        this.value = value;
-        this.jsonValue = JSON.toJSONString(value);
     }
 
     public String getJsonValue() {
@@ -125,18 +124,20 @@ public abstract class BaseField<T> implements Serializable {
 
     public void setJsonValue(String jsonValue) {
         this.jsonValue = jsonValue;
-        this.value = JSON.parseObject(jsonValue,type);
+        if (this.type != null) {
+            this.value = JSON.parseObject(this.jsonValue,type);
+        }
     }
 
     @Override
     public String toString() {
         return "BaseField{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", type=" + type +
                 ", typeName='" + typeName + '\'' +
                 ", tableName='" + tableName + '\'' +
-                ", tableId=" + tableId +
+                ", tableId='" + tableId + '\'' +
                 ", value=" + value +
                 ", jsonValue='" + jsonValue + '\'' +
                 '}';
@@ -145,16 +146,16 @@ public abstract class BaseField<T> implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof BaseField)) return false;
-        BaseField<?> baseField = (BaseField<?>) o;
-        return Objects.equals(getId(), baseField.getId())
-                && Objects.equals(getName(), baseField.getName())
-                && Objects.equals(getType(), baseField.getType())
-                && Objects.equals(getTypeName(), baseField.getTypeName())
-                && Objects.equals(getTableName(), baseField.getTableName())
-                && Objects.equals(getTableId(), baseField.getTableId()) &&
-                Objects.equals(getValue(), baseField.getValue())
-                && Objects.equals(getJsonValue(), baseField.getJsonValue());
+        if (!(o instanceof ExpandField)) return false;
+        ExpandField expandField = (ExpandField) o;
+        return Objects.equals(getId(), expandField.getId())
+                && Objects.equals(getName(), expandField.getName())
+                && Objects.equals(getType(), expandField.getType())
+                && Objects.equals(getTypeName(), expandField.getTypeName())
+                && Objects.equals(getTableName(), expandField.getTableName())
+                && Objects.equals(getTableId(), expandField.getTableId()) &&
+                Objects.equals(getValue(), expandField.getValue())
+                && Objects.equals(getJsonValue(), expandField.getJsonValue());
     }
 
     @Override
