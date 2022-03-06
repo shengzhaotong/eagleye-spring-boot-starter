@@ -120,21 +120,29 @@ public class FieldTable implements Serializable {
                 '}';
     }
 
+    public boolean isEqual(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FieldTable)) return false;
+        FieldTable that = (FieldTable) o;
+        return getId().equals(that.getId())
+                && getName().equals(that.getName())
+                && getTableName().equals(that.getTableName())
+                && getTypeName().equals(that.getTypeName())
+                && getNotes().equals(that.getNotes());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof FieldTable)) return false;
         FieldTable that = (FieldTable) o;
-        return Objects.equals(getId(), that.getId())
-                && Objects.equals(getName(), that.getName())
-                && Objects.equals(getTypeName(), that.getTypeName())
-                && Objects.equals(getNotes(), that.getNotes())
+        return Objects.equals(getName(), that.getName())
                 && Objects.equals(getTableName(), that.getTableName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getTypeName(), getNotes(), getTableName());
+        return Objects.hash(getName(), getTableName());
     }
 
 }

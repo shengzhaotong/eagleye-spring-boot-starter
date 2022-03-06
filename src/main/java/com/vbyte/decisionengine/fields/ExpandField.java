@@ -143,24 +143,33 @@ public class ExpandField implements Serializable {
                 '}';
     }
 
+    public boolean isEqual(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ExpandField)) return false;
+        ExpandField that = (ExpandField) o;
+        return getId().equals(that.getId())
+                && getName().equals(that.getName())
+                && getType().equals(that.getType())
+                && getTypeName().equals(that.getTypeName())
+                && getTableName().equals(that.getTableName())
+                && getTableId().equals(that.getTableId())
+                && getValue().equals(that.getValue())
+                && getJsonValue().equals(that.getJsonValue());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ExpandField)) return false;
         ExpandField expandField = (ExpandField) o;
-        return Objects.equals(getId(), expandField.getId())
-                && Objects.equals(getName(), expandField.getName())
-                && Objects.equals(getType(), expandField.getType())
-                && Objects.equals(getTypeName(), expandField.getTypeName())
+        return Objects.equals(getName(), expandField.getName())
                 && Objects.equals(getTableName(), expandField.getTableName())
-                && Objects.equals(getTableId(), expandField.getTableId()) &&
-                Objects.equals(getValue(), expandField.getValue())
-                && Objects.equals(getJsonValue(), expandField.getJsonValue());
+                && Objects.equals(getTableId(), expandField.getTableId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getType(), getTypeName(), getTableName(), getTableId(), getValue(), getJsonValue());
+        return Objects.hash(getName(), getTableName(), getTableId());
     }
 
 }

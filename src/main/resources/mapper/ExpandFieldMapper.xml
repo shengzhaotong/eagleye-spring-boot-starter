@@ -6,18 +6,23 @@
     <resultMap id="BaseResultMap" type="com.vbyte.decisionengine.fields.ExpandField">
         <id column="id" property="id" />
         <result column="name" property="name" />
-        <result column="table_name" property="table_name" />
-        <result column="type_name" property="type_name" />
-        <result column="table_id" property="table_id" />
+        <result column="table_name" property="tableName" />
+        <result column="type_name" property="typeName" />
+        <result column="table_id" property="tableId" />
+        <result column="json_value" property="jsonValue"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, table_name, type_name, table_id
+        id, name, table_name, type_name, table_id, json_value
     </sql>
 
     <select id="search" resultType="java.lang.String">
         select table_id from fields_msg where table_name = #{tableName} and match (json_value) against (#{key} in natural language mode)
+    </select>
+
+    <select id="judge" resultType="int">
+        select count(*) from fields_msg where table_name = #{tableName} and name = #{fieldName} and table_id = #{tableId}
     </select>
 
 </mapper>

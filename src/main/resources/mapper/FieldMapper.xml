@@ -26,4 +26,16 @@
         ) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic
     </update>
 
+    <select id="selectFieldType" resultType="java.lang.String">
+        SELECT t.COLUMN_TYPE FROM information_schema.`COLUMNS` t WHERE t.TABLE_SCHEMA = (select database()) AND t.TABLE_NAME = upper(#{tableName}) AND t.COLUMN_NAME = #{fieldName}
+    </select>
+
+    <select id="selectExpandFieldType" resultType="java.lang.String">
+        select type_name from fields where table_name = #{tableName} and name = #{fieldName}
+    </select>
+
+    <select id="judge" resultType="int">
+        select count(*) from fields where table_name = #{tableName} and name = #{fieldName}
+    </select>
+
 </mapper>

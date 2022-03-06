@@ -1,7 +1,10 @@
 package com.vbyte.decisionengine.config;
 
+import com.vbyte.decisionengine.mapper.ElementMapper;
 import com.vbyte.decisionengine.mapper.ExpandFieldMapper;
 import com.vbyte.decisionengine.mapper.FieldMapper;
+import com.vbyte.decisionengine.rules.Formula;
+import com.vbyte.decisionengine.service.ElementService;
 import com.vbyte.decisionengine.service.ExpandFieldService;
 import com.vbyte.decisionengine.service.FieldService;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -35,6 +38,24 @@ public class FieldConfiguration {
     @Bean
     public ExpandFieldService expandFieldService () {
         return new ExpandFieldService();
+    }
+
+    @Bean
+    public Formula formula () {
+        return new Formula();
+    }
+
+    @Bean
+    public ElementService elementService () {
+        return new ElementService();
+    }
+
+    @Bean
+    public ElementMapper elementMapper () {
+        sqlSessionFactory.getConfiguration().addMapper(ElementMapper.class);
+        ElementMapper mapper = template.getMapper(ElementMapper.class);
+        int table = mapper.createTable();
+        return mapper;
     }
 
     @Bean
