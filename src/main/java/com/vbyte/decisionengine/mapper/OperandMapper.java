@@ -1,13 +1,11 @@
 package com.vbyte.decisionengine.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.vbyte.decisionengine.rules.Element;
+import com.vbyte.decisionengine.rules.Operand;
 
 @Deprecated
-public interface ElementMapper extends BaseMapper<Element> {
+public interface OperandMapper extends BaseMapper<Operand> {
 
     int createTable();
-
-    int deleteAll();
 
 }

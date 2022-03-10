@@ -41,7 +41,7 @@ public class ExpandFieldService extends ServiceImpl<ExpandFieldMapper, ExpandFie
         return this.baseMapper.selectList(wrapper);
     }
 
-    public List<ExpandField> selectFields (List<Long> list,String tableName) {
+    public List<ExpandField> selectFields (List<String> list,String tableName) {
         QueryWrapper<ExpandField> wrapper = new QueryWrapper<>();
         wrapper.in("table_id",list);
         wrapper.eq("table_name",tableName);
