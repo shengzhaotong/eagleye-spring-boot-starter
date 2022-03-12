@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.io.Serializable;
+
 @TableName("operand")
-public class Operand {
+public class Operand implements Serializable {
 
     @TableId(value = "id",type = IdType.AUTO)
     public Integer id;

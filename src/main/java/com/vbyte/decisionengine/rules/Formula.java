@@ -24,8 +24,9 @@ public class Formula {
     @Autowired
     protected OperandService operandService;
 
-    public boolean judgeCondition (Condition condition) throws ClassNotFoundException, NullPointerException, FieldException, InstantiationException, IllegalAccessException {
+    private boolean judgeCondition (Condition condition,String tableID) throws ClassNotFoundException, NullPointerException, FieldException, InstantiationException, IllegalAccessException {
         Operand operand = operandService.getById(condition.getsOperand());
+        operand.tableID = tableID;
         String dOperand = condition.getdOperand();
         int operator = condition.getOperator();
         String typeName = fieldService.selectFieldType(operand.tableName,operand.fieldName);
@@ -243,15 +244,20 @@ public class Formula {
         }
     }
 
-    private void fillResult (Element element) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    private void fillResult (Element element,String tableID) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         Condition condition = JSON.parseObject(element.item,Condition.class);
-        element.result = this.judgeCondition(condition);
+        element.result = this.judgeCondition(condition,tableID);
     }
 
-    public boolean judgeFormula (Element[] formula) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public boolean policyDecision (String id) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        List<Element> list = elementService.list();
+        return this.judgeFormula(list,id);
+    }
+
+    private boolean judgeFormula (List<Element> formula, String tableID) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         for (Element element : formula) {
             if (element.isOperand) {
-                this.fillResult(element);
+                this.fillResult(element,tableID);
             }
         }
         Stack<Element> stack = new Stack<>();
