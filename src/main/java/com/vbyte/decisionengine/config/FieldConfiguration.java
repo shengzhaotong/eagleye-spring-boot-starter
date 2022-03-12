@@ -1,14 +1,8 @@
 package com.vbyte.decisionengine.config;
 
-import com.vbyte.decisionengine.mapper.ElementMapper;
-import com.vbyte.decisionengine.mapper.ExpandFieldMapper;
-import com.vbyte.decisionengine.mapper.FieldMapper;
-import com.vbyte.decisionengine.mapper.OperandMapper;
+import com.vbyte.decisionengine.mapper.*;
 import com.vbyte.decisionengine.rules.Formula;
-import com.vbyte.decisionengine.service.ElementService;
-import com.vbyte.decisionengine.service.ExpandFieldService;
-import com.vbyte.decisionengine.service.FieldService;
-import com.vbyte.decisionengine.service.OperandService;
+import com.vbyte.decisionengine.service.*;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +49,19 @@ public class FieldConfiguration {
     @Bean
     public OperandService operandService () {
         return new OperandService();
+    }
+
+    @Bean
+    public ConditionService conditionService () {
+        return new ConditionService();
+    }
+
+    @Bean
+    public ConditionMapper conditionMapper () {
+        sqlSessionFactory.getConfiguration().addMapper(ConditionMapper.class);
+        ConditionMapper mapper = template.getMapper(ConditionMapper.class);
+        int table = mapper.createTable();
+        return mapper;
     }
 
     @Bean

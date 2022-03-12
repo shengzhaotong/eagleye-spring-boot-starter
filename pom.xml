@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.github.shengzhaotong</groupId>
 	<artifactId>eagleye-spring-boot-starter</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<name>eagleye</name>
 	<description>the decision engine for bank</description>
 	<packaging>jar</packaging>

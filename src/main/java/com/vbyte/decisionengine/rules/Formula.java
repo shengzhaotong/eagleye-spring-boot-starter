@@ -3,9 +3,7 @@ package com.vbyte.decisionengine.rules;
 import com.alibaba.fastjson.JSON;
 import com.vbyte.decisionengine.exception.FieldException;
 import com.vbyte.decisionengine.fields.ExpandField;
-import com.vbyte.decisionengine.service.ElementService;
-import com.vbyte.decisionengine.service.ExpandFieldService;
-import com.vbyte.decisionengine.service.FieldService;
+import com.vbyte.decisionengine.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
@@ -23,8 +21,11 @@ public class Formula {
     @Autowired
     protected ElementService elementService;
 
+    @Autowired
+    protected OperandService operandService;
+
     public boolean judgeCondition (Condition condition) throws ClassNotFoundException, NullPointerException, FieldException, InstantiationException, IllegalAccessException {
-        Operand operand = condition.getsOperand();
+        Operand operand = operandService.getById(condition.getsOperand());
         String dOperand = condition.getdOperand();
         int operator = condition.getOperator();
         String typeName = fieldService.selectFieldType(operand.tableName,operand.fieldName);
@@ -291,7 +292,7 @@ public class Formula {
                 Condition condition = JSON.parseObject(element.item, Condition.class);
                 int operator = condition.getOperator();
                 String dOperand = condition.getdOperand();
-                Operand sOperand = condition.getsOperand();
+                Operand sOperand = operandService.getById(condition.getsOperand());
                 String typeName = fieldService.selectFieldType(sOperand.tableName,sOperand.fieldName);
                 boolean flag = operator != Operator.GREATER_THAN && operator != Operator.LESS_THAN && operator != Operator.BE_EQUAL_TO
                         && operator != Operator.NOT_EQUAL_TO && operator != Operator.GREATER_BE_EQUAL && operator != Operator.LESS_BE_EQUAL;

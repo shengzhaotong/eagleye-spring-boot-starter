@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vbyte.decisionengine.mapper.ConditionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.vbyte.decisionengine.rules.Condition">
+        <id column="id" property="id" />
+        <result column="s_operand" property="sOperand"/>
+        <result column="d_operand" property="dOperand"/>
+        <result column="operator" property="operator"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, s_operand, d_operand, operator
+    </sql>
+
+    <update id="createTable">
+        CREATE TABLE if not exists `condition`  (
+            `id` int(0) NOT NULL,
+            `s_operand` int(0) NOT NULL,
+            `d_operand` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+            `operator` int(0) NOT NULL,
+            PRIMARY KEY (`id`) USING BTREE
+        ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+    </update>
+
+</mapper>
