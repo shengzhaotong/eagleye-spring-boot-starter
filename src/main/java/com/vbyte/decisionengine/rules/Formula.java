@@ -24,21 +24,20 @@ public class Formula {
     @Autowired
     protected OperandService operandService;
 
+    @Autowired
+    ConditionService conditionService;
+
     private boolean judgeCondition (Condition condition,String tableID) throws ClassNotFoundException, NullPointerException, FieldException, InstantiationException, IllegalAccessException {
         Operand operand = operandService.getById(condition.getsOperand());
         operand.tableID = tableID;
         String dOperand = condition.getdOperand();
-        int operator = condition.getOperator();
+        Integer operator = condition.getOperator();
         String typeName = fieldService.selectFieldType(operand.tableName,operand.fieldName);
-        List<ExpandField> expandFields = expandFieldService.selectField(operand.tableID, operand.tableName, operand.fieldName);
-        if (expandFields == null || expandFields.size() != 1) {
-            throw new FieldException("the num of expandFields exception");
-        }
-        String jsonValue = expandFields.get(0).getJsonValue();
         if (typeName != null) {
+            Object value = fieldService.selectField(operand.tableName, operand.fieldName, operand.tableID);
             switch (typeName) {
                 case "tinyint":
-                    Boolean value1 = JSON.parseObject(jsonValue,Boolean.class);
+                    Boolean value1 = (Boolean) value;
                     Boolean dValue1 = JSON.parseObject(dOperand,Boolean.class);
                     if (operator == Operator.BE_EQUAL_TO) {
                         return value1.equals(dValue1);
@@ -48,11 +47,11 @@ public class Formula {
                         throw new FieldException("operand does not match operator");
                     }
                 case "datetime":
-                    Date value2 = JSON.parseObject(jsonValue, Date.class);
+                    Date value2 = (Date) value;
                     Date dValue2 = JSON.parseObject(dOperand,Date.class);
                     return compareDate(operator, value2, dValue2);
                 case "double":
-                    Double value3 = JSON.parseObject(jsonValue,Double.class);
+                    Double value3 = (Double) value;
                     Double dValue3 = JSON.parseObject(dOperand,Double.class);
                     switch (operator) {
                         case Operator.GREATER_THAN:
@@ -71,7 +70,7 @@ public class Formula {
                             throw new FieldException("operand does not match operator");
                     }
                 case  "int":
-                    Integer value4 = JSON.parseObject(jsonValue,Integer.class);
+                    Integer value4 = (Integer) value;
                     Integer dValue4 = JSON.parseObject(dOperand,Integer.class);
                     switch (operator) {
                         case Operator.GREATER_THAN:
@@ -90,7 +89,7 @@ public class Formula {
                             throw new FieldException("operand does not match operator");
                     }
                 case "bigint":
-                    Long value5 = JSON.parseObject(jsonValue,Long.class);
+                    Long value5 = (Long) value;
                     Long dValue5 = JSON.parseObject(dOperand,Long.class);
                     switch (operator) {
                         case Operator.GREATER_THAN:
@@ -109,7 +108,7 @@ public class Formula {
                             throw new FieldException("operand does not match operator");
                     }
                 case "varchar(255)":
-                    String value6 = JSON.parseObject(jsonValue,String.class);
+                    String value6 = (String) value;
                     String dValue6 = JSON.parseObject(dOperand,String.class);
                     switch (operator) {
                         case Operator.BE_EQUAL_TO:
@@ -127,6 +126,11 @@ public class Formula {
                     throw new FieldException("not found the data type");
             }
         } else {
+            List<ExpandField> expandFields = expandFieldService.selectField(operand.tableID, operand.tableName, operand.fieldName);
+            if (expandFields == null || expandFields.size() != 1) {
+                throw new FieldException("the num of expandFields exception");
+            }
+            String jsonValue = expandFields.get(0).getJsonValue();
             typeName = fieldService.selectExpandFieldType(operand.tableName,operand.fieldName);
             if (typeName != null) {
                 switch (typeName) {
@@ -245,7 +249,7 @@ public class Formula {
     }
 
     private void fillResult (Element element,String tableID) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-        Condition condition = JSON.parseObject(element.item,Condition.class);
+        Condition condition = conditionService.getById(element.conditionOrOperator);
         element.result = this.judgeCondition(condition,tableID);
     }
 
@@ -270,13 +274,13 @@ public class Formula {
                 //为运算符时弹出栈顶和次栈顶并进行运算
                 Element num2 = stack.pop();
                 Element num1 = stack.pop();
-                switch (element.item) {
-                    case "&":
+                switch (element.conditionOrOperator) {
+                    case Operator.AND:
                         result = new Element();
                         result.isOperand = true;
                         result.result = num1.result && num2.result;
                         break;
-                    case "|":
+                    case Operator.OR:
                         result = new Element();
                         result.isOperand = true;
                         result.result = num1.result || num2.result;
@@ -295,7 +299,7 @@ public class Formula {
     public boolean saveFormula (List<Element> formula) throws ClassNotFoundException, FieldException {
         for (Element element : formula) {
             if (element.isOperand) {
-                Condition condition = JSON.parseObject(element.item, Condition.class);
+                Condition condition = conditionService.getById(element.conditionOrOperator);
                 int operator = condition.getOperator();
                 String dOperand = condition.getdOperand();
                 Operand sOperand = operandService.getById(condition.getsOperand());
@@ -311,31 +315,37 @@ public class Formula {
                             if (operator != Operator.BE_EQUAL_TO && operator != Operator.NOT_EQUAL_TO ) {
                                 throw new FieldException("the operand and operator not matching");
                             }
+                            break;
                         case "datetime":
                             JSON.parseObject(dOperand,Date.class);
                             if (flag) {
                                 throw new FieldException("the operand and operator not matching");
                             }
+                            break;
                         case "double":
                             JSON.parseObject(dOperand,Double.class);
                             if (flag) {
                                 throw new FieldException("the operand and operator not matching");
                             }
+                            break;
                         case  "int":
                             JSON.parseObject(dOperand,Integer.class);
                             if (flag) {
                                 throw new FieldException("the operand and operator not matching");
                             }
+                            break;
                         case "bigint":
                             JSON.parseObject(dOperand,Long.class);
                             if (flag) {
                                 throw new FieldException("the operand and operator not matching");
                             }
+                            break;
                         case "varchar(255)":
                             JSON.parseObject(dOperand,String.class);
                             if (flagVar) {
                                 throw new FieldException("the operand and operator not matching");
                             }
+                            break;
                         default:
                             throw new FieldException("not found the data type");
                     }
@@ -348,26 +358,20 @@ public class Formula {
                                 if (operator != Operator.BE_EQUAL_TO && operator != Operator.NOT_EQUAL_TO) {
                                     throw new FieldException("the operand and operator not matching");
                                 }
+                                break;
                             case "java.util.Date":
-                                if (flag) {
-                                    throw new FieldException("the operand and operator not matching");
-                                }
                             case "java.lang.Double":
-                                if (flag) {
-                                    throw new FieldException("the operand and operator not matching");
-                                }
                             case "java.lang.Integer":
-                                if (flag) {
-                                    throw new FieldException("the operand and operator not matching");
-                                }
                             case "java.lang.Long":
                                 if (flag) {
                                     throw new FieldException("the operand and operator not matching");
                                 }
+                                break;
                             case "java.lang.String":
                                 if (flagVar) {
                                     throw new FieldException("the operand and operator not matching");
                                 }
+                                break;
                             default:
                                 throw new FieldException("not found the data type");
                         }
@@ -376,7 +380,7 @@ public class Formula {
                     }
                 }
             } else {
-                if (!"&".equals(element.item) && !"|".equals(element.item)) {
+                if (!(element.conditionOrOperator==Operator.AND) && !(element.conditionOrOperator==Operator.OR)) {
                     throw new FieldException("Illegal operator");
                 }
             }

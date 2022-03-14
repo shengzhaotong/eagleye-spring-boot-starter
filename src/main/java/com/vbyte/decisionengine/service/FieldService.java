@@ -31,6 +31,10 @@ public class FieldService extends ServiceImpl<FieldMapper, FieldTable> {
         }
     }
 
+    public Object selectField (String tableName, String fieldName, String tableId) {
+        return this.baseMapper.selectField(tableName,fieldName,tableId);
+    }
+
     public String selectFieldType (String tableName,String fieldName) {
         return this.baseMapper.selectFieldType(tableName,fieldName);
     }

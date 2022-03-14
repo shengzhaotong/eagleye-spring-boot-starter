@@ -16,7 +16,7 @@ public class Operand implements Serializable {
     /**
      *数据id
      **/
-    @TableField("table_id")
+    @TableField(exist = false)
     public String tableID;
 
     /**

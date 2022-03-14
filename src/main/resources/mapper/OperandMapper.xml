@@ -19,7 +19,6 @@
     <update id="createTable">
         CREATE TABLE if not exists `operand`  (
             `id` int(0) NOT NULL,
-            `table_id` bigint(0) NOT NULL,
             `table_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
             `field_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
             `type_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,

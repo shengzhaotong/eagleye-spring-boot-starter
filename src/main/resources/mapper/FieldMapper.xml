@@ -27,7 +27,7 @@
     </update>
 
     <select id="selectFieldType" resultType="java.lang.String">
-        SELECT t.COLUMN_TYPE FROM information_schema.`COLUMNS` t WHERE t.TABLE_SCHEMA = (select database()) AND t.TABLE_NAME = upper(#{tableName}) AND t.COLUMN_NAME = #{fieldName}
+        SELECT t.COLUMN_TYPE FROM information_schema.`COLUMNS` t WHERE t.TABLE_SCHEMA = (select database()) AND t.TABLE_NAME = #{tableName} AND t.COLUMN_NAME = #{fieldName}
     </select>
 
     <select id="selectExpandFieldType" resultType="java.lang.String">
@@ -36,6 +36,10 @@
 
     <select id="judge" resultType="int">
         select count(*) from fields where table_name = #{tableName} and name = #{fieldName}
+    </select>
+
+    <select id="selectField" resultType="java.lang.Object">
+        SELECT ${fieldName} FROM ${tableName} where id = '${tableId}'
     </select>
 
 </mapper>

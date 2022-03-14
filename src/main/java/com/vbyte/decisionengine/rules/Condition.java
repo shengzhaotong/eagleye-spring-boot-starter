@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
 
-@TableName("condition")
+@TableName("conditions")
 public class Condition implements Serializable {
 
     /**
@@ -32,7 +32,7 @@ public class Condition implements Serializable {
      * 操作符
      * */
     @TableField("operator")
-    private int operator;
+    private Integer operator;
 
     public Integer getId() {
         return id;
@@ -58,11 +58,11 @@ public class Condition implements Serializable {
         this.dOperand = dOperand;
     }
 
-    public int getOperator() {
+    public Integer getOperator() {
         return operator;
     }
 
-    public void setOperator(int operator) {
+    public void setOperator(Integer operator) {
         this.operator = operator;
     }
 

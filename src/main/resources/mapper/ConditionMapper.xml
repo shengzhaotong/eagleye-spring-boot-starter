@@ -16,7 +16,7 @@
     </sql>
 
     <update id="createTable">
-        CREATE TABLE if not exists `condition`  (
+        CREATE TABLE if not exists `conditions`  (
             `id` int(0) NOT NULL,
             `s_operand` int(0) NOT NULL,
             `d_operand` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,

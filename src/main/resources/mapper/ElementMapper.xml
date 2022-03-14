@@ -17,7 +17,7 @@
     <update id="createTable">
         CREATE TABLE IF NOT EXISTS `element` (
             `id` int(0) NOT NULL,
-            `item` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+            `condition_or_operator` int(0) NOT NULL,
             `is_operand` tinyint(0) NOT NULL,
             PRIMARY KEY (`id`) USING BTREE
         ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;

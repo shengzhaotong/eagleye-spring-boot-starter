@@ -13,8 +13,8 @@ public class Element implements Serializable {
     @TableId(value = "id",type = IdType.AUTO)
     public Integer id;
 
-    @TableField("item")
-    public String item;
+    @TableField("condition_or_operator")
+    public Integer conditionOrOperator;
 
     @TableField("is_operand")
     public Boolean isOperand;
