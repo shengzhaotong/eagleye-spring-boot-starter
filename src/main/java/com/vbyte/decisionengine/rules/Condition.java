@@ -13,7 +13,7 @@ public class Condition implements Serializable {
     /**
      * 主键id
      * */
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private Integer id;
 
     /**
@@ -33,6 +33,16 @@ public class Condition implements Serializable {
      * */
     @TableField("operator")
     private Integer operator;
+
+    public Condition() {
+    }
+
+    public Condition(Integer id, Integer sOperand, String dOperand, Integer operator) {
+        this.id = id;
+        this.sOperand = sOperand;
+        this.dOperand = dOperand;
+        this.operator = operator;
+    }
 
     public Integer getId() {
         return id;
@@ -64,6 +74,16 @@ public class Condition implements Serializable {
 
     public void setOperator(Integer operator) {
         this.operator = operator;
+    }
+
+    @Override
+    public String toString() {
+        return "Condition{" +
+                "id=" + id +
+                ", sOperand=" + sOperand +
+                ", dOperand='" + dOperand + '\'' +
+                ", operator=" + operator +
+                '}';
     }
 
 }

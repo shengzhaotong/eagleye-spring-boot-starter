@@ -10,7 +10,7 @@ import java.io.Serializable;
 @TableName("operand")
 public class Operand implements Serializable {
 
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id",type = IdType.ASSIGN_ID)
     public Integer id;
 
     /**
@@ -36,5 +36,67 @@ public class Operand implements Serializable {
      * */
     @TableField("type_name")
     public String typeName;
+
+    public Operand() {
+    }
+
+    public Operand(Integer id, String tableID, String tableName, String fieldName, String typeName) {
+        this.id = id;
+        this.tableID = tableID;
+        this.tableName = tableName;
+        this.fieldName = fieldName;
+        this.typeName = typeName;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getTableID() {
+        return tableID;
+    }
+
+    public void setTableID(String tableID) {
+        this.tableID = tableID;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    @Override
+    public String toString() {
+        return "Operand{" +
+                "id=" + id +
+                ", tableID='" + tableID + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", fieldName='" + fieldName + '\'' +
+                ", typeName='" + typeName + '\'' +
+                '}';
+    }
 
 }

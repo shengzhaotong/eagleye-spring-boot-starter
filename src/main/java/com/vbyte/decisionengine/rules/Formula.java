@@ -35,95 +35,83 @@ public class Formula {
         String typeName = fieldService.selectFieldType(operand.tableName,operand.fieldName);
         if (typeName != null) {
             Object value = fieldService.selectField(operand.tableName, operand.fieldName, operand.tableID);
-            switch (typeName) {
-                case "tinyint":
-                    Boolean value1 = (Boolean) value;
-                    Boolean dValue1 = JSON.parseObject(dOperand,Boolean.class);
-                    if (operator == Operator.BE_EQUAL_TO) {
-                        return value1.equals(dValue1);
-                    } else if (operator == Operator.NOT_EQUAL_TO) {
-                        return !value1.equals(dValue1);
-                    } else {
+            if (typeName.contains("bigint")) {
+                Long value5 = (Long) value;
+                Long dValue5 = JSON.parseObject(dOperand,Long.class);
+                switch (operator) {
+                    case Operator.GREATER_THAN:
+                        return value5.compareTo(dValue5) > 0;
+                    case Operator.LESS_THAN:
+                        return value5.compareTo(dValue5) < 0;
+                    case Operator.BE_EQUAL_TO:
+                        return value5.equals(dValue5);
+                    case Operator.NOT_EQUAL_TO:
+                        return !value5.equals(dValue5);
+                    case Operator.GREATER_BE_EQUAL:
+                        return value5.compareTo(dValue5) >= 0;
+                    case Operator.LESS_BE_EQUAL:
+                        return value5.compareTo(dValue5) <= 0;
+                    default:
                         throw new FieldException("operand does not match operator");
-                    }
-                case "datetime":
-                    Date value2 = (Date) value;
-                    Date dValue2 = JSON.parseObject(dOperand,Date.class);
-                    return compareDate(operator, value2, dValue2);
-                case "double":
-                    Double value3 = (Double) value;
-                    Double dValue3 = JSON.parseObject(dOperand,Double.class);
-                    switch (operator) {
-                        case Operator.GREATER_THAN:
-                            return value3.compareTo(dValue3) > 0;
-                        case Operator.LESS_THAN:
-                            return value3.compareTo(dValue3) < 0;
-                        case Operator.BE_EQUAL_TO:
-                            return value3.equals(dValue3);
-                        case Operator.NOT_EQUAL_TO:
-                            return !value3.equals(dValue3);
-                        case Operator.GREATER_BE_EQUAL:
-                            return value3.compareTo(dValue3) >= 0;
-                        case Operator.LESS_BE_EQUAL:
-                            return value3.compareTo(dValue3) <= 0;
-                        default:
-                            throw new FieldException("operand does not match operator");
-                    }
-                case  "int":
-                    Integer value4 = (Integer) value;
-                    Integer dValue4 = JSON.parseObject(dOperand,Integer.class);
-                    switch (operator) {
-                        case Operator.GREATER_THAN:
-                            return value4.compareTo(dValue4) > 0;
-                        case Operator.LESS_THAN:
-                            return value4.compareTo(dValue4) < 0;
-                        case Operator.BE_EQUAL_TO:
-                            return value4.equals(dValue4);
-                        case Operator.NOT_EQUAL_TO:
-                            return !value4.equals(dValue4);
-                        case Operator.GREATER_BE_EQUAL:
-                            return value4.compareTo(dValue4) >= 0;
-                        case Operator.LESS_BE_EQUAL:
-                            return value4.compareTo(dValue4) <= 0;
-                        default:
-                            throw new FieldException("operand does not match operator");
-                    }
-                case "bigint":
-                    Long value5 = (Long) value;
-                    Long dValue5 = JSON.parseObject(dOperand,Long.class);
-                    switch (operator) {
-                        case Operator.GREATER_THAN:
-                            return value5.compareTo(dValue5) > 0;
-                        case Operator.LESS_THAN:
-                            return value5.compareTo(dValue5) < 0;
-                        case Operator.BE_EQUAL_TO:
-                            return value5.equals(dValue5);
-                        case Operator.NOT_EQUAL_TO:
-                            return !value5.equals(dValue5);
-                        case Operator.GREATER_BE_EQUAL:
-                            return value5.compareTo(dValue5) >= 0;
-                        case Operator.LESS_BE_EQUAL:
-                            return value5.compareTo(dValue5) <= 0;
-                        default:
-                            throw new FieldException("operand does not match operator");
-                    }
-                case "varchar(255)":
-                    String value6 = (String) value;
-                    String dValue6 = JSON.parseObject(dOperand,String.class);
-                    switch (operator) {
-                        case Operator.BE_EQUAL_TO:
-                            return value6.equals(dValue6);
-                        case Operator.NOT_EQUAL_TO:
-                            return !value6.equals(dValue6);
-                        case Operator.CONTAIN:
-                            return value6.contains(dValue6);
-                        case Operator.NOT_CONTAIN:
-                            return !value6.contains(dValue6);
-                        default:
-                            throw new FieldException("operand does not match operator");
-                    }
-                default:
-                    throw new FieldException("not found the data type");
+                }
+            } else if (typeName.contains("double")) {
+                Double value3 = (Double) value;
+                Double dValue3 = JSON.parseObject(dOperand,Double.class);
+                switch (operator) {
+                    case Operator.GREATER_THAN:
+                        return value3.compareTo(dValue3) > 0;
+                    case Operator.LESS_THAN:
+                        return value3.compareTo(dValue3) < 0;
+                    case Operator.BE_EQUAL_TO:
+                        return value3.equals(dValue3);
+                    case Operator.NOT_EQUAL_TO:
+                        return !value3.equals(dValue3);
+                    case Operator.GREATER_BE_EQUAL:
+                        return value3.compareTo(dValue3) >= 0;
+                    case Operator.LESS_BE_EQUAL:
+                        return value3.compareTo(dValue3) <= 0;
+                    default:
+                        throw new FieldException("operand does not match operator");
+                }
+            } else if (typeName.contains("date")) {
+                Date value2 = (Date) value;
+                Date dValue2 = JSON.parseObject(dOperand,Date.class);
+                return compareDate(operator, value2, dValue2);
+            } else if (typeName.contains("varchar")) {
+                String value6 = (String) value;
+                switch (operator) {
+                    case Operator.BE_EQUAL_TO:
+                        return value6.equals(dOperand);
+                    case Operator.NOT_EQUAL_TO:
+                        return !value6.equals(dOperand);
+                    case Operator.CONTAIN:
+                        return value6.contains(dOperand);
+                    case Operator.NOT_CONTAIN:
+                        return !value6.contains(dOperand);
+                    default:
+                        throw new FieldException("operand does not match operator");
+                }
+            } else if (typeName.contains("int")) {
+                Integer value4 = (Integer) value;
+                Integer dValue4 = JSON.parseObject(dOperand,Integer.class);
+                switch (operator) {
+                    case Operator.GREATER_THAN:
+                        return value4.compareTo(dValue4) > 0;
+                    case Operator.LESS_THAN:
+                        return value4.compareTo(dValue4) < 0;
+                    case Operator.BE_EQUAL_TO:
+                        return value4.equals(dValue4);
+                    case Operator.NOT_EQUAL_TO:
+                        return !value4.equals(dValue4);
+                    case Operator.GREATER_BE_EQUAL:
+                        return value4.compareTo(dValue4) >= 0;
+                    case Operator.LESS_BE_EQUAL:
+                        return value4.compareTo(dValue4) <= 0;
+                    default:
+                        throw new FieldException("operand does not match operator");
+                }
+            } else {
+                throw new FieldException("not found the data type");
             }
         } else {
             List<ExpandField> expandFields = expandFieldService.selectField(operand.tableID, operand.tableName, operand.fieldName);
@@ -309,45 +297,33 @@ public class Formula {
                 boolean flagVar = operator != Operator.LESS_BE_EQUAL && operator != Operator.NOT_EQUAL_TO
                         && operator != Operator.CONTAIN && operator != Operator.NOT_CONTAIN;
                 if (typeName != null) {
-                    switch (typeName) {
-                        case "tinyint":
-                            JSON.parseObject(dOperand, Boolean.class);
-                            if (operator != Operator.BE_EQUAL_TO && operator != Operator.NOT_EQUAL_TO ) {
-                                throw new FieldException("the operand and operator not matching");
-                            }
-                            break;
-                        case "datetime":
-                            JSON.parseObject(dOperand,Date.class);
-                            if (flag) {
-                                throw new FieldException("the operand and operator not matching");
-                            }
-                            break;
-                        case "double":
-                            JSON.parseObject(dOperand,Double.class);
-                            if (flag) {
-                                throw new FieldException("the operand and operator not matching");
-                            }
-                            break;
-                        case  "int":
-                            JSON.parseObject(dOperand,Integer.class);
-                            if (flag) {
-                                throw new FieldException("the operand and operator not matching");
-                            }
-                            break;
-                        case "bigint":
-                            JSON.parseObject(dOperand,Long.class);
-                            if (flag) {
-                                throw new FieldException("the operand and operator not matching");
-                            }
-                            break;
-                        case "varchar(255)":
-                            JSON.parseObject(dOperand,String.class);
-                            if (flagVar) {
-                                throw new FieldException("the operand and operator not matching");
-                            }
-                            break;
-                        default:
-                            throw new FieldException("not found the data type");
+                    if (typeName.contains("bigint")) {
+                        JSON.parseObject(dOperand,Long.class);
+                        if (flag) {
+                            throw new FieldException("the operand and operator not matching");
+                        }
+                    } else if (typeName.contains("date")) {
+                        JSON.parseObject(dOperand,Date.class);
+                        if (flag) {
+                            throw new FieldException("the operand and operator not matching");
+                        }
+                    } else if (typeName.contains("double")) {
+                        JSON.parseObject(dOperand,Double.class);
+                        if (flag) {
+                            throw new FieldException("the operand and operator not matching");
+                        }
+                    } else if (typeName.contains("varchar")) {
+                        JSON.parseObject(dOperand,String.class);
+                        if (flagVar) {
+                            throw new FieldException("the operand and operator not matching");
+                        }
+                    } else if (typeName.contains("int")) {
+                        JSON.parseObject(dOperand,Integer.class);
+                        if (flag) {
+                            throw new FieldException("the operand and operator not matching");
+                        }
+                    } else {
+                        throw new FieldException("not found the data type");
                     }
                 } else {
                     typeName = fieldService.selectExpandFieldType(sOperand.tableName, sOperand.fieldName);
