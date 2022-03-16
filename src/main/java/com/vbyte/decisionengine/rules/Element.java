@@ -10,7 +10,7 @@ import java.io.Serializable;
 @TableName("element")
 public class Element implements Serializable {
 
-    @TableId(value = "id",type = IdType.ASSIGN_ID)
+    @TableId(value = "id",type = IdType.INPUT)
     public Integer id;
 
     @TableField("condition_or_operator")

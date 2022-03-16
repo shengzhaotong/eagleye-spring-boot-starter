@@ -17,12 +17,12 @@
 
     <update id="createTable">
         CREATE TABLE if not exists `conditions`  (
-            `id` int(0) NOT NULL,
+            `id` int(0) NOT NULL AUTO_INCREMENT,
             `s_operand` int(0) NOT NULL,
             `d_operand` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
             `operator` int(0) NOT NULL,
             PRIMARY KEY (`id`) USING BTREE
-        ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+        ) ENGINE = InnoDB AUTO_INCREMENT = 125 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
     </update>
 
 </mapper>
