@@ -294,7 +294,7 @@ public class Formula {
                 String typeName = fieldService.selectFieldType(sOperand.tableName,sOperand.fieldName);
                 boolean flag = operator != Operator.GREATER_THAN && operator != Operator.LESS_THAN && operator != Operator.BE_EQUAL_TO
                         && operator != Operator.NOT_EQUAL_TO && operator != Operator.GREATER_BE_EQUAL && operator != Operator.LESS_BE_EQUAL;
-                boolean flagVar = operator != Operator.LESS_BE_EQUAL && operator != Operator.NOT_EQUAL_TO
+                boolean flagVar = operator != Operator.BE_EQUAL_TO && operator != Operator.NOT_EQUAL_TO
                         && operator != Operator.CONTAIN && operator != Operator.NOT_CONTAIN;
                 if (typeName != null) {
                     if (typeName.contains("bigint")) {
