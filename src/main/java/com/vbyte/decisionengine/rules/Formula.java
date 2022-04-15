@@ -243,6 +243,7 @@ public class Formula {
 
     public boolean policyDecision (String id) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         List<Element> list = elementService.list();
+        if (list == null || list.size() == 0) return false;
         return this.judgeFormula(list,id);
     }
 
@@ -313,7 +314,6 @@ public class Formula {
                             throw new FieldException("the operand and operator not matching");
                         }
                     } else if (typeName.contains("varchar")) {
-                        JSON.parseObject(dOperand,String.class);
                         if (flagVar) {
                             throw new FieldException("the operand and operator not matching");
                         }
